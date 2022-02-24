@@ -2,7 +2,7 @@
 
 const firebaseConfig = {
 
-    apiKey: "AIzaSyBYiAwHOTbMPako05tdmAmQCKDeZwiZQFc",
+    apiKey: process.env.apiKey,
   
     authDomain: "vestigia.firebaseapp.com",
   
