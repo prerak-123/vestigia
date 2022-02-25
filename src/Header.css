@@ -2,15 +2,71 @@
     display: flex;
     width: 100%;
     height: 50px;
-    background-color: #ff4e00;
-    background-image: linear-gradient(315deg #ec9f05 0%, #ff4e00 74%, );
+    /* Created with https://www.css-gradient.com */
+    background: #F14607;
+    background: -webkit-linear-gradient(right, #F14607, #F08B10);
+    background: -moz-linear-gradient(right, #F14607, #F08B10);
+    background: linear-gradient(to left, #F14607, #F08B10);
+    position: fixed;
 }
 
 .logo{
     margin-top: auto;
     margin-bottom: auto;
     height: 90%;
-    margin-left: 10%;
+    margin-left: 5%;
     margin-right: 10%;
 }
+
+.header__button{
+    margin-top: auto;
+    margin-bottom: auto;
+    height: 50px;
+    float: right;
+    margin-left: 2%;
+    margin-right: 2%;
+    background-color:transparent ;
+    border: none;
+    text-align: center;
+    color:aliceblue;
+    font-weight: bolder;
+    font-size: 30px;
+}
+
+.header__button:hover{
+    color:rgb(2, 240, 240);
+}
+
+.search{
+    height:50px;
+    width:15%;
+    margin-left: 2%;
+    margin-right: 0%;
+}
+
+.search__bar{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    height: 60%;
+    margin-right:5%;
+    width:95%;
+}
+
+.search__icon{
+    margin-top: auto;
+    margin-bottom: auto;
+    transform: scale(1.22);
+    background-color: rgb(9, 218, 255);
+    border-radius: 3px;
+    margin-right: 2%;
+}
+
+.github__link{
+    margin-left:35%;
+    margin-right:5%;
+}
+
+
+
 
