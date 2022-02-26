@@ -2,6 +2,7 @@ import React from 'react'
 import './Header.css'
 import SearchIcon from '@mui/icons-material/Search';
 
+
 function Header(props) {
   return (
     <div className='header'>
@@ -15,17 +16,14 @@ function Header(props) {
         <SearchIcon className='search__icon'/>
       </div>
 
-      <div className='github__link'>
-        <button className='header__button' type="button" onClick={(e) => {
-          e.preventDefault();
-          window.location.href='https://github.com/prerak-123/vestigia';
-        }
-        }>GitHub</button>
-      </div>
-
       <div className='user'>
         <button className='header__button user__button' type="button">{props.user}</button>  
       </div>
+      
+      <div className='github'>
+        <a href='https://github.com/prerak-123/vestigia' className='github__link'>GitHub</a>
+      </div>
+
     </div>
     
   )

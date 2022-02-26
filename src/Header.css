@@ -10,6 +10,7 @@
     background: linear-gradient(to left, #F14607, #F08B10);
     position: sticky;
     z-index: 100;
+    overflow-x: auto;
 }
 
 .logo{
@@ -19,6 +20,7 @@
 }
 
 .header__button{
+    transition: 0.2s;
     margin-top: auto;
     margin-bottom: auto;
     height: 50px;
@@ -28,10 +30,6 @@
     color:aliceblue;
     font-weight: bolder;
     font-size: 30px;
-}
-
-.header__button:hover{
-    color:rgb(2, 240, 240);
 }
 
 .search{
@@ -48,7 +46,7 @@
     min-width: 100px;
     border-color: grey;
     margin-right: 3%;
-    font-size: 16px;
+    font-size: 18px;
 }
 
 .search__icon{
@@ -59,10 +57,35 @@
     border-radius: 3px;
 }
 
-.user__button{
-    font-size: 3vh;
+.search__icon:hover{
+    margin-top: auto;
+    margin-bottom: auto;
+    transform: scale(1.30);
+    background-color: rgb(96, 204, 204);
+    border-radius: 3px;
 }
 
+.github{
+    margin-top: auto;
+    margin-bottom: auto;
+}
 
+.github__link{
+    color: aliceblue;
+    font-size: 3vh; 
+    text-decoration: none; 
+    font-weight: bolder;  
+}
 
+.github__link:hover{
+    color:rgb(2, 240, 240); 
+}
 
+.header__button:hover{
+    transition: 0.2s;
+    padding-left:2vh;
+    padding-right:2vh;
+    color:rgb(2, 240, 240);
+    border-bottom:solid;
+    border-color: rgb(255, 255, 0);
+}

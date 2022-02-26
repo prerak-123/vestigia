@@ -1,13 +1,24 @@
 import './App.css';
 import Header from './Header.js'
-import Snowfall from 'react-snowfall'
+import Library from './Library'
+import Login from './Login'
+import {BrowserRouter as Router, Routes, Route} from "react-router-dom"
 
 function App() {
   return (
-    <div className="app">
-      <Header user="Guest"/>
-      <Snowfall color='white'/>
-    </div>
+    <Router>
+      <div className="app">
+        <Header user="Guest"/>
+        <Routes>
+          <Route path="/" element={
+            <Login/>
+          }/>
+          <Route path='/library' element={
+            <Library/>
+          }/>
+        </Routes>
+      </div>
+    </Router>
   );
 }
 

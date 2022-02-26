@@ -1,0 +1,24 @@
+.library{
+    padding-top: 20px;
+    height: max-content;
+    background: linear-gradient(rgb(245, 235, 210), white);
+    width:100%;
+}
+
+.title{
+    padding-bottom: 20px;
+    font-family: 'Hallo Sans', sans-serif;
+    text-align: center;
+    font-size: 50px;
+    color: rgb(18, 35, 184);
+}
+
+.horizontal__line{
+    width: 85vw;
+    margin-left: auto;
+    margin-right: auto;
+    border: 0;
+    height: 1.5px;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+}
+
