@@ -17,6 +17,7 @@
     margin-top: auto;
     margin-bottom: auto;
     height: 90%;
+    cursor: pointer;
 }
 
 .header__button{
@@ -63,6 +64,7 @@
     transform: scale(1.30);
     background-color: rgb(96, 204, 204);
     border-radius: 3px;
+    cursor:pointer;
 }
 
 .github{
@@ -88,4 +90,5 @@
     color:rgb(2, 240, 240);
     border-bottom:solid;
     border-color: rgb(255, 255, 0);
+    cursor:pointer;
 }
