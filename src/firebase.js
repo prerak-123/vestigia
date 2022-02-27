@@ -4,16 +4,16 @@ const firebaseConfig = {
 
     apiKey: process.env.REACT_APP_API_KEY,
   
-    authDomain: "vestigia-7cddf.firebaseapp.com",
+    authDomain: process.env.REACT_APP_AUTH_DOMAIN,
   
-    projectId: "vestigia-7cddf",
+    projectId: process.env.REACT_APP_PROJECT_ID,
   
-    storageBucket: "vestigia-7cddf.appspot.com",
+    storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
   
-    messagingSenderId: "339330736096",
+    messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
   
-    appId: "1:339330736096:web:e1193f163595d8c001d585",
+    appId: process.env.REACT_APP_APP_ID,
   
-    measurementId: "G-QPPH72R18P"
+    measurementId: process.env.REACT_APP_MEASUREMENT_ID
   
   };

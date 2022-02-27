@@ -20,7 +20,7 @@ class Header extends React.Component{
         </div>
 
         <div className='user'>
-          <button className='header__button user__button' type="button">{this.props.user}</button>  
+          <button className='header__button user__button' type="button">Log In</button>  
         </div>
         
         <div className='github'>

@@ -8,7 +8,7 @@ function App() {
   return (
     <Router>
       <div className="app">
-        <Header user="Guest"/>
+        <Header/>
         <Routes>
           <Route path="/" element={
             <Login/>
