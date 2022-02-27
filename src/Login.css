@@ -1,4 +1,7 @@
 .login{
+    display: flex;
+    align-items: center;
+    justify-content: center;
     top: 0;
     left: 0;
     height: 100vh;
@@ -6,3 +9,59 @@
     position: fixed;
     background-color: rgb(26, 214, 214);
 }
+
+.panel{
+    display: flex;
+    flex-flow: column;
+    z-index: 100;
+    background-color: beige;
+    height:max-content;
+    width: 40vw;
+    border-radius: 12px;
+    box-shadow: 0px 0px 10px;
+    align-items: center;
+    padding-bottom: 3%;
+    padding-top: 2%;
+}
+
+.heading{
+    margin-bottom: 2%;
+    height: 15%;
+}
+
+.heading>p{
+    font-size: 300%;
+    color: rgb(88, 87, 87);
+}
+
+.credentials{
+    display: flex;
+    flex-flow: column;
+    height: 70%;
+}
+
+.credentials>form{
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    margin-bottom: 3%;
+}
+
+.credentials>form>label{
+    margin-top: 2%;
+}
+
+.credentials>form>label>input{
+    width:30vw;
+    font-size: 20px;
+    border-radius: 2px;
+    border-width: 0.5px;
+    padding: 2px;
+}
+
+.submit__button{
+    background-color: rgb(16, 131, 224, 0.5);
+    border: none;
+    cursor: pointer;
+}
+
