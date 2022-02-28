@@ -1,4 +1,6 @@
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
 
 const firebaseConfig = {
 
@@ -17,3 +19,14 @@ const firebaseConfig = {
     measurementId: process.env.REACT_APP_MEASUREMENT_ID
   
   };
+
+firebase.initializeApp(firebaseConfig);
+
+export const auth = firebase.auth();
+
+const provider = new firebase.auth.GoogleAuthProvider();
+provider.setCustomParameters({ prompt: 'select_account' });
+
+export const signInWithGoogle = () => auth.signInWithPopup(provider);
+
+export default firebase;
