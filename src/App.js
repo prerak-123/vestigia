@@ -23,14 +23,14 @@ function App() {
         <Header/>
         <Routes>
           <Route path="/" element={
-            <Home/>
+            <Home user={user}/>
           }/>
           <Route path='/login' element={
-            <Login/>
+            <Login />
           }
             />
           <Route path='/library' element={
-            <Library/>
+            <Library user={user}/>
           }/>
         </Routes>
       </div>
