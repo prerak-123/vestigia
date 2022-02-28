@@ -3,6 +3,8 @@
     height: max-content;
     background: linear-gradient(rgb(245, 235, 210), white);
     width:100%;
+    overflow: auto;
+    margin-bottom: 20px;
 }
 
 .title{

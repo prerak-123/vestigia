@@ -9,8 +9,9 @@ class Header extends React.Component{
   render(){
     return (
       <div className='header'>
-        
+        <Link to='/'>
           <img src={process.env.PUBLIC_URL+"logo.png"} alt = 'Logo' className='logo' />
+        </Link>
         <Link to='/library'>
           <button className='header__button'>Library</button>
         </Link>
@@ -20,7 +21,9 @@ class Header extends React.Component{
         </div>
 
         <div className='user'>
-          <button className='header__button user__button' type="button">Log In</button>  
+          <Link to='/login'>
+            <button className='header__button user__button' type="button">Log In</button>  
+          </Link>
         </div>
         
         <div className='github'>

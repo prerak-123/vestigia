@@ -3,6 +3,7 @@ import Header from './Header.js'
 import Library from './Library'
 import Login from './Login'
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom"
+import Home from './Home'
 
 function App() {
   return (
@@ -11,8 +12,12 @@ function App() {
         <Header/>
         <Routes>
           <Route path="/" element={
-            <Login/>
+            <Home/>
           }/>
+          <Route path='/login' element={
+            <Login/>
+          }
+            />
           <Route path='/library' element={
             <Library/>
           }/>
