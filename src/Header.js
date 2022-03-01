@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import React from 'react'
 import './Header.css'
 import SearchIcon from '@mui/icons-material/Search'
@@ -6,30 +5,20 @@ import {Link, useNavigate } from "react-router-dom"
 import firebase from './firebase';
 
 
-function Header(){
-
-  const [user, setUser] = useState(null);
+function Header(props){
 
   const routeChange = () =>{ 
-    let path = `/login`; 
+    let path = `/`; 
     navigate(path);
   }
 
   let navigate = useNavigate();
 
-  useEffect(() => {
-    firebase.auth().onAuthStateChanged(user => {
-      setUser(user);
-    })
-  }, [])
-    if(user==null){
+    if(props.user==null){
       return (
         <div className='header'>
           <Link to='/'>
             <img src={process.env.PUBLIC_URL+"logo.png"} alt = 'Logo' className='logo' />
-          </Link>
-          <Link to='/library'>
-            <button className='header__button'>Library</button>
           </Link>
           <div className='search'>
             <input type={'search'} placeholder='Search' className='search__bar'></input>
@@ -58,6 +47,9 @@ function Header(){
         <Link to='/library'>
           <button className='header__button'>Library</button>
         </Link>
+        <Link to='/add'>
+            <button className='header__button'>Add Book</button>
+          </Link>
         <div className='search'>
           <input type={'search'} placeholder='Search' className='search__bar'></input>
           <SearchIcon className='search__icon'/>

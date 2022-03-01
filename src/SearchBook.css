@@ -1,0 +1,21 @@
+.SearchBook{
+    height: max-content;
+    background: linear-gradient(rgb(245, 235, 210), white);
+    width:100%;
+    overflow: auto;
+    margin-bottom: 20px;
+}
+
+.searchbar__container{
+    display: flex;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    height: max-content;
+    background-color: rgb(43, 126, 250);
+    justify-content: space-evenly;
+}
+
+.searchbar{
+    font-size: 20px; 
+}
+

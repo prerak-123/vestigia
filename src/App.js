@@ -6,6 +6,7 @@ import Login from './Login'
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom"
 import firebase from './firebase';
 import Home from './Home'
+import SearchBook from './SearchBook'
 
 function App() {
   const [user, setUser] = useState(null);
@@ -20,18 +21,19 @@ function App() {
   return (
     <Router>
       <div className="app">
-        <Header/>
+        <Header user={user}/>
         <Routes>
           <Route path="/" element={
             <Home user={user}/>
           }/>
           <Route path='/login' element={
-            <Login />
+            <Login/>
           }
             />
           <Route path='/library' element={
             <Library user={user}/>
           }/>
+          <Route path='add' element={<SearchBook user={user}/>}/>
         </Routes>
       </div>
     </Router>

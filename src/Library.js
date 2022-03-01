@@ -3,8 +3,9 @@ import Login from './Login'
 import './Library.css'
 
 
-function Library(props) {
-  if(props.user==null){
+class Library extends React.Component{
+  render(){
+  if(this.props.user==null){
     alert("Please Log In");
     return(
       <Login/>
@@ -16,6 +17,7 @@ function Library(props) {
         <hr className='horizontal__line'/>
     </div>
   )
+}
 }
 
 export default Library
