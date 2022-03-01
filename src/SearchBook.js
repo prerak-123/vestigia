@@ -54,12 +54,29 @@ class SearchBook extends React.Component {
                 </form>
                 
             </div>
-            {this.state.result.map(book=><img src={book.volumeInfo.imageLinks !== undefined ? book.volumeInfo.imageLinks.thumbnail : ''} alt={book.title}/>)}
+
+            <div className='results'>
+
+            
+            {this.state.result.map(book=>
+              <div className='book__container'>
+              <div className='image'>
+                <img src={book.volumeInfo.imageLinks !== undefined ? book.volumeInfo.imageLinks.thumbnail : ''} alt={book.volumeInfo.title}/>
+              </div>
+              <div className='book__name'>
+                <h3>{book.volumeInfo.title}</h3>
+              </div>
+              <div className='add__button'>
+                <button>Add to Library</button>
+              </div>
+            </div>
+              )}
+
+            </div>
         </div>
     )
   }
 }
-
 
 
 export default SearchBook
