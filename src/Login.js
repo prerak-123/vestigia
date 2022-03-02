@@ -2,13 +2,20 @@ import React from 'react'
 import './Login.css'
 import Snowfall from 'react-snowfall'
 import { signInWithGoogle } from './firebase';
+import Home from './Home'
 
-function Login() {
-  return (
-    <div className='login'>
-        <Snowfall color='white'/>
-        <LoginPanel/>
-    </div>
+function Login(props) {
+  if(props.user == null){
+    return (
+      <div className='login'>
+          <Snowfall color='white'/>
+          <LoginPanel/>
+      </div>
+    )
+  }
+  alert("Logged in Successfully!")
+  return(
+    <Home/>
   )
 }
 

@@ -60,3 +60,8 @@
     padding-top: 5px;
     padding-bottom: 5px;
 }
+
+.book__author{
+    padding-bottom: 20px;
+    font-size: 18px;
+}

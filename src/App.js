@@ -8,12 +8,19 @@ import firebase from './firebase';
 import Home from './Home'
 import SearchBook from './SearchBook'
 
+var db = null;
+
 function App() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged(user => {
       setUser(user);
+      db = firebase.firestore();
+      db.collection("users").doc(user.uid).set({
+        name: user.displayName,
+        email: user.email,  
+      }, {merge: true})
     })
   }, [])
 
@@ -27,7 +34,7 @@ function App() {
             <Home user={user}/>
           }/>
           <Route path='/login' element={
-            <Login/>
+            <Login user={user}/>
           }
             />
           <Route path='/library' element={
@@ -40,4 +47,5 @@ function App() {
   );
 }
 
+export {db};
 export default App;

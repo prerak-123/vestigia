@@ -1,10 +1,10 @@
 import React from 'react'
 import './Home.css'
 
-function Home() {
+function Home(props) {
   return (
     <div className='home'>
-      <h1>Vestigia</h1>
+      {props.user==null? <h1>Hello Guest</h1>:<h1>Hello, {props.user.displayName}</h1>}
     </div>
   )
 }
