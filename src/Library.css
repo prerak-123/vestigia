@@ -19,8 +19,34 @@
     width: 85vw;
     margin-left: auto;
     margin-right: auto;
+    margin-bottom: 30px;
     border: 0;
     height: 1.5px;
     background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+}
+
+.library__books{
+    display: flex;
+    height: max-content;
+    padding-top: 20px;
+    flex-flow: row;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: space-evenly;
+    background-color: #eb9d00;
+background-image: url("https://www.transparenttextures.com/patterns/wood-pattern.png");
+}
+
+.library__container{
+    width:25%;
+    display: flex;
+    flex-flow: column;
+    padding: 20px;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.library__title{
+    color: rgb(10, 26, 56);
 }
 

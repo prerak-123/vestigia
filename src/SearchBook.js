@@ -26,11 +26,18 @@ class SearchBook extends React.Component {
       const id = props.id;
       const userid = props.user.uid;
       const authors = props.author !== undefined ? props.author:['Author Not Found']; 
+      const thumbnail = props.image !== undefined ? props.image.thumbnail : '';
+
+      db.collection('users').doc(userid).update({
+        books_list: firebase.firestore.FieldValue.arrayUnion(id)
+      })
 
       db.collection('users').doc(userid).collection("books").doc(id).set({
         title: props.title,
-        authors: authors
+        authors: authors,
+        thumbnail: thumbnail
       }, {merge: true}).then(alert("Book Added Successfully!")) 
+
     }
 
     return(
