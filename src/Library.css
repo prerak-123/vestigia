@@ -43,10 +43,45 @@ background-image: url("https://www.transparenttextures.com/patterns/wood-pattern
     flex-flow: column;
     padding: 20px;
     align-items: center;
-    margin-bottom: 30px;
+    margin-bottom: 100px;
+    border: solid 5px;
+    border-image: radial-gradient(rgb(143, 41, 0), rgb(175, 14, 2)) 1;
+    background-color: rgba(196, 192, 192, 0.2);
 }
 
 .library__title{
+    padding-top: 5px;
     color: rgb(10, 26, 56);
+}
+
+.library__image>img{
+    box-shadow: 0px 0px 15px;
+}
+
+.library__button{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width:100%;
+}
+
+.library__button>button{
+    margin-left: 15%;
+    margin-right: 15%;
+    width:70%;
+    font-size: 24px;
+    font-weight: 800;
+    color: white;
+}
+
+.button__1{
+    background-color: rgb(16, 131, 207);
+    border: none;
+    cursor: pointer;
+}
+
+.button__2{
+    background-color: rgb(241, 64, 33);
+    border: none;
+    cursor: pointer;
 }
 

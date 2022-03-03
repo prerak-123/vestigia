@@ -77,7 +77,13 @@ function RenderBooks(props){
         <img src={props.book.thumbnail} alt={props.book.title}></img>
       </div>
       <div className='library__title'>
-        <h2>{props.book.title}</h2>
+        <h1>{props.book.title}</h1>
+      </div>
+      <div className='library__button'>
+        <button className='button__1'>View</button>
+      </div>
+      <div className='library__button'>
+        <button className='button__2'>Edit</button>
       </div>
     </div>
   )
