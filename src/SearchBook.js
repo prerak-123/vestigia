@@ -21,24 +21,50 @@ class SearchBook extends React.Component {
 
   displayBook(props) {
 
-    function handleClick(event){
+    async function handleClick(event){
       event.preventDefault();
       const id = props.id;
       const userid = props.user.uid;
       const authors = props.author !== undefined ? props.author:['Author Not Found']; 
       const thumbnail = props.image !== undefined ? props.image.thumbnail : '';
 
-      db.collection('users').doc(userid).update({
-        books_list: firebase.firestore.FieldValue.arrayUnion(id)
-      })
+      const dataRef = await db.collection("users").doc(userid).get();
+      const data = dataRef.data();
+      if(data.books == null){
+        let temp = {
+          id: id,
+          title: props.title,
+          authors: authors,
+          thumbnail: thumbnail,
+          chapters: []
+        }
 
-      db.collection('users').doc(userid).collection("books").doc(id).set({
-        id: id,
-        title: props.title,
-        authors: authors,
-        thumbnail: thumbnail,
-        chapters: []
-      }, {merge: true}).then(alert("Book Added Successfully!")) 
+        db.collection('users').doc(userid).set({
+          books: [temp]
+        }, {merge: true}).then(alert("Book Added Successfully"))
+      }
+
+      else{
+        for(let i = 0; i < data.books.length; i++){
+          if(data.books[i].id == id){
+            alert("Book Already Present in Library!")
+            return
+          }
+        }
+
+        let temp = {
+          id: id,
+          title: props.title,
+          authors: authors,
+          thumbnail: thumbnail,
+          chapters: []
+        }
+
+        db.collection('users').doc(userid).update({
+          books: firebase.firestore.FieldValue.arrayUnion(temp)
+        }).then(alert("Book Added Successfully"))
+
+      }
 
     }
 

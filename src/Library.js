@@ -11,14 +11,12 @@ class Library extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-      books_list: [],
-      books_info: [],
+      books: [],
       show_library: true,
       edit_book: [false, ""],
       edit_character: false,
 
     }
-    this.listBooks = this.listBooks.bind(this);
     this.getInfo = this.getInfo.bind(this);
     this.RenderBooks = this.RenderBooks.bind(this);
     this.RenderEditPage = this.RenderEditPage.bind(this);
@@ -26,7 +24,7 @@ class Library extends React.Component{
 
   componentDidMount(){
     if(this.props.user !== null){
-      this.listBooks().then(this.getInfo);
+      this.getInfo();
     }
   }
   //props.book is an object book with title, authors, thumbnail, chapters
@@ -79,30 +77,16 @@ class Library extends React.Component{
     )
   }
 
-  listBooks = async() => {
-    const dataRef = await db.collection("users").doc(this.props.user.uid).get();
-
-    const data = dataRef.data();
-
-    if(data.books_list !== undefined){
-      this.setState(
-        {books_list: data.books_list}
-      )
-    }
-
-  }
-
   getInfo = async() => {
-    let temp = [];
-    for (let i = 0; i < this.state.books_list.length; i++) {
-      const element = this.state.books_list[i];
-      const dataRef = await db.collection("users").doc(this.props.user.uid).collection("books").doc(element).get();
-      const data = dataRef.data();
-      temp = [...temp, data]
+  
+    const dataRef = await db.collection("users").doc(this.props.user.uid).get();
+    const data = dataRef.data();
+    if(data.books !=null){
+      this.setState({
+        books: data.books
+      })
     }
-    this.setState({
-      books_info: temp
-    })
+    
   }
 
   render(){
@@ -119,18 +103,18 @@ class Library extends React.Component{
         <div className='library'>
           <p className='title'>Your Library</p>
           <hr className='horizontal__line'/>
-          {this.state.books_info.length>0 && <div className='library__books'>
-            {this.state.books_info.map(book=><this.RenderBooks book={book}/>)}
+          {this.state.books.length>0 && <div className='library__books'>
+            {this.state.books.map(book=><this.RenderBooks book={book}/>)}
           </div>}
         </div>
       )
     }
 
     if(this.state.edit_book[0]){
-      for (let i = 0; i < this.state.books_list.length; i++){
-        if(this.state.books_info[i].id == this.state.edit_book[1]){
+      for (let i = 0; i < this.state.books.length; i++){
+        if(this.state.books[i].id == this.state.edit_book[1]){
           return(
-            <this.RenderEditPage book = {this.state.books_info[i]}/>
+            <this.RenderEditPage book = {this.state.books[i]}/>
           )
         }
       }
