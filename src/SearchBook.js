@@ -33,9 +33,11 @@ class SearchBook extends React.Component {
       })
 
       db.collection('users').doc(userid).collection("books").doc(id).set({
+        id: id,
         title: props.title,
         authors: authors,
-        thumbnail: thumbnail
+        thumbnail: thumbnail,
+        chapters: []
       }, {merge: true}).then(alert("Book Added Successfully!")) 
 
     }

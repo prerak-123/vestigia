@@ -16,11 +16,13 @@ function App() {
   useEffect(() => {
     firebase.auth().onAuthStateChanged(user => {
       setUser(user);
-      db = firebase.firestore();
-      db.collection("users").doc(user.uid).set({
-        name: user.displayName,
-        email: user.email,  
-      }, {merge: true})
+      if(user!==null){
+        db = firebase.firestore();
+        db.collection("users").doc(user.uid).set({
+          name: user.displayName,
+          email: user.email,  
+        }, {merge: true})
+      }
     })
   }, [])
 

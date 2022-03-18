@@ -12,16 +12,47 @@ class Library extends React.Component{
     super(props);
     this.state = {
       books_list: [],
-      books_info: []
+      books_info: [],
+      show_library: true,
+      edit_book: [false, ""],
+      edit_character: false,
+
     }
     this.listBooks = this.listBooks.bind(this);
     this.getInfo = this.getInfo.bind(this);
+    this.RenderBooks = this.RenderBooks.bind(this);
   }
 
   componentDidMount(){
     if(this.props.user !== null){
       this.listBooks().then(this.getInfo);
     }
+  }
+  //prop is an object book with title, authors, thumbnail, chapters
+  RenderBooks = (props) => {
+    return(
+      <div className='library__container'>
+        <div className='library__image'>
+          <img src={props.book.thumbnail} alt={props.book.title}></img>
+        </div>
+        <div className='library__title'>
+          <h1>{props.book.title}</h1>
+        </div>
+        <div className='library__button'>
+          <button className='button__1'>View</button>
+        </div>
+        <div className='library__button'>
+          <button className='button__2' onClick={(event) => {
+            event.preventDefault();
+            this.setState({
+              show_library: false,
+              edit_book: [true, props.book.id],
+              edit_character: false
+            })
+          }}>Edit</button>
+        </div>
+      </div>
+    )
   }
 
   listBooks = async() => {
@@ -38,14 +69,16 @@ class Library extends React.Component{
   }
 
   getInfo = async() => {
+    let temp = [];
     for (let i = 0; i < this.state.books_list.length; i++) {
       const element = this.state.books_list[i];
       const dataRef = await db.collection("users").doc(this.props.user.uid).collection("books").doc(element).get();
       const data = dataRef.data();
-      this.setState({
-        books_info: [...this.state.books_info, data]
-      })
+      temp = [...temp, data]
     }
+    this.setState({
+      books_info: temp
+    })
   }
 
   render(){
@@ -56,37 +89,23 @@ class Library extends React.Component{
         <Login/>
         )
       }
-          
-    return (
-      <div className='library'>
-        <p className='title'>Your Library</p>
-        <hr className='horizontal__line'/>
-        {this.state.books_info.length>0 && <div className='library__books'>
-          {this.state.books_info.map(book=><RenderBooks book={book}/>)}
-        </div>}
-      </div>
-    )
+    
+    if(this.state.show_library){
+      return (
+        <div className='library'>
+          <p className='title'>Your Library</p>
+          <hr className='horizontal__line'/>
+          {this.state.books_info.length>0 && <div className='library__books'>
+            {this.state.books_info.map(book=><this.RenderBooks book={book}/>)}
+          </div>}
+        </div>
+      )
+    }
   }
 }
 
-//prop is an object book with title, authors and thumbnail
-function RenderBooks(props){
-  return(
-    <div className='library__container'>
-      <div className='library__image'>
-        <img src={props.book.thumbnail} alt={props.book.title}></img>
-      </div>
-      <div className='library__title'>
-        <h1>{props.book.title}</h1>
-      </div>
-      <div className='library__button'>
-        <button className='button__1'>View</button>
-      </div>
-      <div className='library__button'>
-        <button className='button__2'>Edit</button>
-      </div>
-    </div>
-  )
-}
+
 
 export default Library
+
+//RenderBooks
