@@ -21,6 +21,7 @@ class Library extends React.Component{
     this.listBooks = this.listBooks.bind(this);
     this.getInfo = this.getInfo.bind(this);
     this.RenderBooks = this.RenderBooks.bind(this);
+    this.RenderEditPage = this.RenderEditPage.bind(this);
   }
 
   componentDidMount(){
@@ -28,7 +29,7 @@ class Library extends React.Component{
       this.listBooks().then(this.getInfo);
     }
   }
-  //prop is an object book with title, authors, thumbnail, chapters
+  //props.book is an object book with title, authors, thumbnail, chapters
   RenderBooks = (props) => {
     return(
       <div className='library__container'>
@@ -50,6 +51,29 @@ class Library extends React.Component{
               edit_character: false
             })
           }}>Edit</button>
+        </div>
+      </div>
+    )
+  }
+
+  //props.book is an object book with title, authors, thumbnail, chapters
+  RenderEditPage = (props) => {
+    return(
+      <div className='edit__page'>
+        <div className='edit__page__header'>
+          <div className='back__button'>
+            <button onClick={(event)=>{
+              event.preventDefault();
+              this.setState({
+                show_library: true,
+                edit_book: [false, ""],
+                edit_character: false
+              })
+            }}>Back To Library</button>
+          </div>
+          <div className='book__title'>
+            <p>{props.book.title}</p>
+          </div>
         </div>
       </div>
     )
@@ -101,6 +125,16 @@ class Library extends React.Component{
         </div>
       )
     }
+
+    if(this.state.edit_book[0]){
+      for (let i = 0; i < this.state.books_list.length; i++){
+        if(this.state.books_info[i].id == this.state.edit_book[1]){
+          return(
+            <this.RenderEditPage book = {this.state.books_info[i]}/>
+          )
+        }
+      }
+    }
   }
 }
 
@@ -109,3 +143,4 @@ class Library extends React.Component{
 export default Library
 
 //RenderBooks
+//RenderEditPage

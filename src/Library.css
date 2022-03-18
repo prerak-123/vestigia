@@ -34,7 +34,7 @@
     width: 100%;
     justify-content: space-evenly;
     background-color: #eb9d00;
-background-image: url("https://www.transparenttextures.com/patterns/wood-pattern.png");
+    background-image: url("https://www.transparenttextures.com/patterns/wood-pattern.png");
 }
 
 .library__container{
@@ -83,5 +83,47 @@ background-image: url("https://www.transparenttextures.com/patterns/wood-pattern
     background-color: rgb(241, 64, 33);
     border: none;
     cursor: pointer;
+}
+
+.edit__page{
+    display: flex;
+    height: max-content;
+    width: 100vw;
+    background: linear-gradient(rgb(245, 235, 210), white);
+}
+
+.edit__page__header{
+    display: flex;
+    flex-wrap: wrap;
+    height: max-content;
+    width: 100vw;
+    background-color: #0867c0;
+    overflow-x: auto;
+}
+
+.back__button{
+    align-self: center;
+}
+
+.back__button>button{
+    background-color: rgb(0,0,0,0);
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    color:aliceblue;
+}
+
+.book__title{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-left: auto;
+    margin-right: auto; 
+    color: rgb(246, 248, 125);
+}
+
+.book__title>p{
+    font-family: 'Hallo Sans', sans-serif;
+    text-align: center;
+    font-size: 40px;
 }
 
