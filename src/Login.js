@@ -2,7 +2,7 @@ import React from 'react'
 import './Login.css'
 import Snowfall from 'react-snowfall'
 import { signInWithGoogle } from './firebase';
-import Home from './Home'
+import { Navigate } from "react-router-dom"
 
 function Login(props) {
   if(props.user == null){
@@ -15,7 +15,7 @@ function Login(props) {
   }
   alert("Logged in Successfully!")
   return(
-    <Home/>
+    <Navigate relpace to="/"/>
   )
 }
 

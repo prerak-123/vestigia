@@ -46,7 +46,7 @@ class SearchBook extends React.Component {
 
       else{
         for(let i = 0; i < data.books.length; i++){
-          if(data.books[i].id == id){
+          if(data.books[i].id === id){
             alert("Book Already Present in Library!")
             return
           }

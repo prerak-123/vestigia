@@ -1,7 +1,7 @@
 import React from 'react'
-import Login from './Login'
 import './Library.css'
 import firebase from './firebase';
+import { Navigate } from "react-router-dom"
 
 const db = firebase.firestore();
 
@@ -94,7 +94,7 @@ class Library extends React.Component{
     if(this.props.user==null){
       alert("Please Log In");
       return(
-        <Login/>
+       <Navigate relpace to="/login"/>
         )
       }
     
@@ -104,7 +104,7 @@ class Library extends React.Component{
           <p className='title'>Your Library</p>
           <hr className='horizontal__line'/>
           {this.state.books.length>0 && <div className='library__books'>
-            {this.state.books.map(book=><this.RenderBooks book={book}/>)}
+            {this.state.books.map(book=><this.RenderBooks book={book} key={book.title}/>)}
           </div>}
         </div>
       )
@@ -112,7 +112,7 @@ class Library extends React.Component{
 
     if(this.state.edit_book[0]){
       for (let i = 0; i < this.state.books.length; i++){
-        if(this.state.books[i].id == this.state.edit_book[1]){
+        if(this.state.books[i].id === this.state.edit_book[1]){
           return(
             <this.RenderEditPage book = {this.state.books[i]}/>
           )
