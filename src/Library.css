@@ -174,7 +174,9 @@
 }
 
 .characters__list{
+    width: 25vw;
     display: flex;
+    flex-flow: column;
     flex-wrap: wrap;
 }
 

@@ -3,9 +3,20 @@ import './Library.css'
 import firebase from './firebase';
 import { Navigate } from "react-router-dom"
 import Button from '@mui/material/Button';
+import { useFormik } from 'formik';
+import TextField from '@mui/material/TextField';
+import AddBoxIcon from '@mui/icons-material/AddBox';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
+const theme = createTheme({
+  typography: {
+    fontSize: 25,
+    fontFamily: [
+      'Cookie',
+      'cursive',
+    ].join(','),
+  },});
 const db = firebase.firestore();
-
 
 class Library extends React.Component{
 
@@ -16,12 +27,14 @@ class Library extends React.Component{
       show_library: true,
       edit_book: [false, ""],
       edit_character: false,
-      newchapter: true
+      newchapter: true,
+      edit_chapter: ""
     }
     this.getInfo = this.getInfo.bind(this);
     this.RenderBooks = this.RenderBooks.bind(this);
     this.RenderEditPage = this.RenderEditPage.bind(this);
     this.EditChapter = this.EditChapter.bind(this);
+    this.CharactersList = this.CharactersList.bind(this);
   }
 
   componentDidMount(){
@@ -56,8 +69,26 @@ class Library extends React.Component{
     )
   }
 
+  CharactersList = (props) => {
+    return(
+      <div style={{
+        marginBottom: "15px"
+      }}>
+        <Button variant="outlined" size="large" style={{width: '25vw'} } onClick = {(event) => {
+          event.preventDefault();
+          this.setState({
+            newchapter: false,
+            edit_chapter: props.Name
+          })
+        }}>{props.Name}</Button>
+      </div>
+    )
+  }
+
   //props.book is an object book with title, authors, thumbnail, chapters
+  //props.index => this.state.books[i]
   RenderEditPage = (props) => {
+
     return(
       <div className='edit__page'>
         <div className='edit__page__header'>
@@ -68,7 +99,8 @@ class Library extends React.Component{
                 show_library: true,
                 edit_book: [false, ""],
                 edit_character: false,
-                newchapter: true
+                newchapter: true,
+                edit_chapter: ""
               })
             }}>Back To Library</button>
           </div>
@@ -78,13 +110,15 @@ class Library extends React.Component{
         </div>
         <div className='main__content'>
           <div className='chapters__list'>
-            <Button variant="outlined" size="large" style={{maxWidth: '25vw'} } onClick = {(event)=>{
+            {this.state.books[props.index].chapters.map((chapter) => <this.CharactersList key={chapter.Name} Name={chapter.Name} /> )}
+            <Button  startIcon={<AddBoxIcon/>} variant="outlined" size="large" style={{width: '25vw'} } onClick = {(event)=>{
               this.setState({
-                newchapter: true
+                newchapter: true,
+                edit_chapter: ""
               })
             }}> NEW CHAPTER</Button>
           </div>
-          <this.EditChapter/>
+          <this.EditChapter index = {props.index} name = {this.state.edit_chapter}/>
         </div>
       </div>
     )
@@ -93,6 +127,15 @@ class Library extends React.Component{
   EditChapter = (props) => {
 
     function ShowCharacters(props){
+      if(props.newcharacter)
+      return(
+        <div className='character__button'>
+          <Button startIcon={<AddBoxIcon/>} variant="contained" size="large" style={{maxWidth: '55vw'} }>
+            {props.name}
+          </Button>
+        </div>
+      )
+
       return(
         <div className='character__button'>
           <Button variant="contained" size="large" style={{maxWidth: '55vw'} }>
@@ -102,23 +145,113 @@ class Library extends React.Component{
       )
     };
 
-    if(this.state.newchapter){
+    //End of showCharacters Function
+    if(!this.state.newchapter){
+
+      const formik = useFormik({
+
+        initialValues: {
+          Location: ""          
+        },
+   
+        onSubmit: (values) => {
+          console.log(values)
+        },
+   
+      });
       return(
         <div className='edit__chapter'>
-          <p className='chapter__title'> New Chapter </p>
+          <p className='chapter__title'> {props.name} </p>
           <hr/>
           <p>Characters</p>
           <div className='characters__list'>
-            <ShowCharacters name='Yennefer'/>
+            <ShowCharacters name='New Character' newcharacter={true}/>
           </div>
           <hr/>
           <p>Details</p>
+          <ThemeProvider theme={theme}>
+            <form onSubmit={formik.handleSubmit}>
+              <TextField
+              style={{width: '40vw'} }
+              variant="standard"
+              label='Location'
+              id="Location"
+              name="Location"
+              value={formik.values.Location}
+              onChange={formik.handleChange}
+            />
+          </form>
+        </ThemeProvider>
         </div>
       )
     }
 
+    const formik = useFormik({
+
+      initialValues: {
+        Name: ""
+      },
+ 
+      onSubmit: (values, { resetForm }) => {
+        if(values.Name === ""){
+          alert("Enter a name!");
+          return;
+        }
+
+        for(let i = 0; i < this.state.books[props.index].chapters.length; i++){
+          if(this.state.books[props.index].chapters[i].Name.toLowerCase() === values.Name.toLowerCase()){
+            alert("Chapter Already Exists!");
+            return;
+          }
+        }
+        values.Time = '';
+        values.Events = [];
+        values.Synopsis = '';
+
+        this.state.books[props.index].chapters.push(values);
+
+        this.setState({
+            books: this.state.books
+        })
+
+        db.collection('users').doc(this.props.user.uid).set({
+          books: this.state.books
+        }, {merge: true}).then(alert("Chapter Added Successfully!"))
+
+        resetForm();
+
+      },
+ 
+    });
+
     return(
-      <div>Hello World!</div>
+      <div className='edit__chapter'>
+        <form onSubmit={formik.handleSubmit}>
+          <ThemeProvider theme={theme}>
+            <TextField
+            style={{
+              width: '40vw',
+              marginRight: '3vw'
+            } }
+            variant="standard"
+            label='Enter Name of Chapter'
+            placeholder='Unique Name to Identify Chapter'
+            id='Name'
+            name='Name'
+            value = {formik.values.Name}
+            onChange={formik.handleChange}
+            />
+
+            <Button onClick = {(event) => {
+              event.preventDefault();
+              formik.handleSubmit();
+            }} variant = 'contained'>
+              Add Chapter
+            </Button>
+
+          </ThemeProvider>
+        </form>
+      </div>
     )
   }
 
@@ -159,7 +292,7 @@ class Library extends React.Component{
       for (let i = 0; i < this.state.books.length; i++){
         if(this.state.books[i].id === this.state.edit_book[1]){
           return(
-            <this.RenderEditPage book = {this.state.books[i]}/>
+            <this.RenderEditPage book = {this.state.books[i]} index = {i}/>
           )
         }
       }
