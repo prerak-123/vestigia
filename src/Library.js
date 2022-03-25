@@ -28,7 +28,7 @@ class Library extends React.Component{
       edit_book: [false, ""],
       edit_character: false,
       newchapter: true,
-      edit_chapter: ""
+      edit_chapter: ["", 0]
     }
     this.getInfo = this.getInfo.bind(this);
     this.RenderBooks = this.RenderBooks.bind(this);
@@ -78,7 +78,7 @@ class Library extends React.Component{
           event.preventDefault();
           this.setState({
             newchapter: false,
-            edit_chapter: props.Name
+            edit_chapter: [props.Name, props.index]
           })
         }}>{props.Name}</Button>
       </div>
@@ -100,7 +100,7 @@ class Library extends React.Component{
                 edit_book: [false, ""],
                 edit_character: false,
                 newchapter: true,
-                edit_chapter: ""
+                edit_chapter: ["", 0]
               })
             }}>Back To Library</button>
           </div>
@@ -110,15 +110,15 @@ class Library extends React.Component{
         </div>
         <div className='main__content'>
           <div className='chapters__list'>
-            {this.state.books[props.index].chapters.map((chapter) => <this.CharactersList key={chapter.Name} Name={chapter.Name} /> )}
+            {this.state.books[props.index].chapters.map((chapter, index) => <this.CharactersList index = {index} key={index} Name={chapter.Name} /> )}
             <Button  startIcon={<AddBoxIcon/>} variant="outlined" size="large" style={{width: '25vw'} } onClick = {(event)=>{
               this.setState({
                 newchapter: true,
-                edit_chapter: ""
+                edit_chapter: ["", 0]
               })
             }}> NEW CHAPTER</Button>
           </div>
-          <this.EditChapter index = {props.index} name = {this.state.edit_chapter}/>
+          <this.EditChapter index = {props.index} name = {this.state.edit_chapter[0]}/>
         </div>
       </div>
     )
@@ -151,7 +151,9 @@ class Library extends React.Component{
       const formik = useFormik({
 
         initialValues: {
-          Location: ""          
+          Location: "",
+          Time: "",
+          Synopsis: ""         
         },
    
         onSubmit: (values) => {
@@ -180,6 +182,27 @@ class Library extends React.Component{
               value={formik.values.Location}
               onChange={formik.handleChange}
             />
+
+          <TextField
+            style={{width: '40vw'} }
+            variant="standard"
+            label='Time'
+            id="Time"
+            name="Time"
+            value={formik.values.Time}
+            onChange={formik.handleChange}
+          />
+
+          <TextField
+            style={{width: '40vw'} }
+            multiline
+            variant="standard"
+            label='Synopsis'
+            id="Synopsis"
+            name="Synopsis"
+            value={formik.values.Synopsis}
+            onChange={formik.handleChange}
+          />
           </form>
         </ThemeProvider>
         </div>
@@ -205,7 +228,6 @@ class Library extends React.Component{
           }
         }
         values.Time = '';
-        values.Events = [];
         values.Synopsis = '';
 
         this.state.books[props.index].chapters.push(values);
@@ -299,8 +321,6 @@ class Library extends React.Component{
     }
   }
 }
-
-
 
 export default Library
 

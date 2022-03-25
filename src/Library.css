@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200&display=swap');
 
 .library{
+    overflow-x: hidden;
     padding-top: 20px;
     height: max-content;
     background: linear-gradient(rgb(245, 235, 210), white);
