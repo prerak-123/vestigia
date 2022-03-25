@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200&display=swap');
+
 .library{
     padding-top: 20px;
     height: max-content;
@@ -87,6 +89,7 @@
 
 .edit__page{
     display: flex;
+    flex-flow: column;
     height: max-content;
     width: 100vw;
     background: linear-gradient(rgb(245, 235, 210), white);
@@ -127,4 +130,60 @@
     text-align: center;
     font-size: 40px;
 }
+
+.main__content{
+    display: flex;
+    flex-flow: row;
+    height: max-content;
+    flex-wrap: wrap;
+}
+
+.chapters__list{
+    margin-left: 20px;
+    padding-top: 20px;
+    width: max-content;
+    margin-right: 20px;
+}
+
+.edit__chapter{
+    width: 60vw;
+    height: max-content;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 20px;
+    font-family: 'Cookie', cursive;
+    font-size: 40px;
+}
+
+.chapter__title{
+    font-size: 54px;
+}
+
+.edit__chapter>hr{
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+    border: 0;
+    height: 1.5px;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+}
+
+.edit__chapter>p{
+    text-align: center;
+}
+
+.characters__list{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.character__button{
+    margin: 8px;
+}
+
+
+
+
+
 

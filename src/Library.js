@@ -2,6 +2,7 @@ import React from 'react'
 import './Library.css'
 import firebase from './firebase';
 import { Navigate } from "react-router-dom"
+import Button from '@mui/material/Button';
 
 const db = firebase.firestore();
 
@@ -15,11 +16,12 @@ class Library extends React.Component{
       show_library: true,
       edit_book: [false, ""],
       edit_character: false,
-
+      newchapter: true
     }
     this.getInfo = this.getInfo.bind(this);
     this.RenderBooks = this.RenderBooks.bind(this);
     this.RenderEditPage = this.RenderEditPage.bind(this);
+    this.EditChapter = this.EditChapter.bind(this);
   }
 
   componentDidMount(){
@@ -65,7 +67,8 @@ class Library extends React.Component{
               this.setState({
                 show_library: true,
                 edit_book: [false, ""],
-                edit_character: false
+                edit_character: false,
+                newchapter: true
               })
             }}>Back To Library</button>
           </div>
@@ -73,7 +76,49 @@ class Library extends React.Component{
             <p>{props.book.title}</p>
           </div>
         </div>
+        <div className='main__content'>
+          <div className='chapters__list'>
+            <Button variant="outlined" size="large" style={{maxWidth: '25vw'} } onClick = {(event)=>{
+              this.setState({
+                newchapter: true
+              })
+            }}> NEW CHAPTER</Button>
+          </div>
+          <this.EditChapter/>
+        </div>
       </div>
+    )
+  }
+
+  EditChapter = (props) => {
+
+    function ShowCharacters(props){
+      return(
+        <div className='character__button'>
+          <Button variant="contained" size="large" style={{maxWidth: '55vw'} }>
+            {props.name}
+          </Button>
+        </div>
+      )
+    };
+
+    if(this.state.newchapter){
+      return(
+        <div className='edit__chapter'>
+          <p className='chapter__title'> New Chapter </p>
+          <hr/>
+          <p>Characters</p>
+          <div className='characters__list'>
+            <ShowCharacters name='Yennefer'/>
+          </div>
+          <hr/>
+          <p>Details</p>
+        </div>
+      )
+    }
+
+    return(
+      <div>Hello World!</div>
     )
   }
 
@@ -128,3 +173,4 @@ export default Library
 
 //RenderBooks
 //RenderEditPage
+//EditChapter
