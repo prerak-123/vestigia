@@ -3,7 +3,7 @@ import './Library.css'
 import firebase from './firebase';
 import { Navigate } from "react-router-dom"
 import Button from '@mui/material/Button';
-import { useFormik } from 'formik';
+import { useFormik, Formik } from 'formik';
 import TextField from '@mui/material/TextField';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -148,19 +148,6 @@ class Library extends React.Component{
     //End of showCharacters Function
     if(!this.state.newchapter){
 
-      const formik = useFormik({
-
-        initialValues: {
-          Location: "",
-          Time: "",
-          Synopsis: ""         
-        },
-   
-        onSubmit: (values) => {
-          console.log(values)
-        },
-   
-      });
       return(
         <div className='edit__chapter'>
           <p className='chapter__title'> {props.name} </p>
@@ -172,83 +159,111 @@ class Library extends React.Component{
           <hr/>
           <p>Details</p>
           <ThemeProvider theme={theme}>
-            <form onSubmit={formik.handleSubmit}>
-              <TextField
-              style={{width: '40vw'} }
-              variant="standard"
-              label='Location'
-              id="Location"
-              name="Location"
-              value={formik.values.Location}
-              onChange={formik.handleChange}
-            />
 
-          <TextField
-            style={{width: '40vw'} }
-            variant="standard"
-            label='Time'
-            id="Time"
-            name="Time"
-            value={formik.values.Time}
-            onChange={formik.handleChange}
-          />
+          <Formik
+            enableReinitialize
 
-          <TextField
-            style={{width: '40vw'} }
-            multiline
-            variant="standard"
-            label='Synopsis'
-            id="Synopsis"
-            name="Synopsis"
-            value={formik.values.Synopsis}
-            onChange={formik.handleChange}
-          />
-          </form>
+            initialValues = {{
+              Location: this.state.books[props.index].chapters[this.state.edit_chapter[1]].Location? this.state.books[props.index].chapters[this.state.edit_chapter[1]].Location:"" ,
+              Time: "",
+              Synopsis: ""         
+            }}
+
+            onSubmit={(values) => {
+              alert("Hello!")
+            }}
+          >
+
+       {props => (
+
+        <form onSubmit={props.handleSubmit}>
+        <TextField
+        style={{width: '40vw'} }
+        variant="standard"
+        label='Location'
+        id="Location"
+        name="Location"
+        value={props.values.Location}
+        onChange={props.handleChange}
+        />
+
+        <TextField
+        style={{width: '40vw'} }
+        variant="standard"
+        label='Time'
+        id="Time"
+        name="Time"
+        value={props.values.Time}
+        onChange={props.handleChange}
+        />
+
+        <TextField
+        style={{width: '40vw'} }
+        multiline
+        variant="standard"
+        label='Synopsis'
+        id="Synopsis"
+        name="Synopsis"
+        value={props.values.Synopsis}
+        onChange={props.handleChange}
+        />
+
+        <br/>
+
+        <Button style={{marginTop: "20px"}} type="submit" variant = 'contained'>Update</Button>
+        </form>
+
+       )}
+
+     </Formik>
         </ThemeProvider>
         </div>
       )
     }
 
-    const formik = useFormik({
-
-      initialValues: {
-        Name: ""
-      },
- 
-      onSubmit: (values, { resetForm }) => {
-        if(values.Name === ""){
-          alert("Enter a name!");
-          return;
-        }
-
-        for(let i = 0; i < this.state.books[props.index].chapters.length; i++){
-          if(this.state.books[props.index].chapters[i].Name.toLowerCase() === values.Name.toLowerCase()){
-            alert("Chapter Already Exists!");
-            return;
-          }
-        }
-        values.Time = '';
-        values.Synopsis = '';
-
-        this.state.books[props.index].chapters.push(values);
-
-        this.setState({
-            books: this.state.books
-        })
-
-        db.collection('users').doc(this.props.user.uid).set({
-          books: this.state.books
-        }, {merge: true}).then(alert("Chapter Added Successfully!"))
-
-        resetForm();
-
-      },
- 
-    });
-
     return(
       <div className='edit__chapter'>
-        <form onSubmit={formik.handleSubmit}>
+
+        <Formik
+
+          initialValues= {{
+            Name: ""
+          }}
+
+          onSubmit= {(values, { resetForm }) => {
+            if(values.Name === ""){
+              alert("Enter a name!");
+              return;
+            }
+    
+            for(let i = 0; i < this.state.books[props.index].chapters.length; i++){
+              if(this.state.books[props.index].chapters[i].Name.toLowerCase() === values.Name.toLowerCase()){
+                alert("Chapter Already Exists!");
+                return;
+              }
+            }
+            values.Time = '';
+            values.Synopsis = '';
+    
+            this.state.books[props.index].chapters.push(values);
+    
+            this.setState({
+                books: this.state.books
+            })
+    
+            db.collection('users').doc(this.props.user.uid).set({
+              books: this.state.books
+            }, {merge: true}).then(alert("Chapter Added Successfully!"))
+    
+            resetForm();
+    
+          }}
+
+     >
+
+       {props => (
+
+          <form onSubmit={props.handleSubmit}>
           <ThemeProvider theme={theme}>
             <TextField
             style={{
@@ -260,19 +275,23 @@ class Library extends React.Component{
             placeholder='Unique Name to Identify Chapter'
             id='Name'
             name='Name'
-            value = {formik.values.Name}
-            onChange={formik.handleChange}
+            value = {props.values.Name}
+            onChange={props.handleChange}
             />
 
             <Button onClick = {(event) => {
               event.preventDefault();
-              formik.handleSubmit();
+              props.handleSubmit();
             }} variant = 'contained'>
               Add Chapter
             </Button>
 
           </ThemeProvider>
-        </form>
+          </form>
+
+       )}
+
+     </Formik>
       </div>
     )
   }
