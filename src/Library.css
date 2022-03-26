@@ -92,7 +92,7 @@
     display: flex;
     flex-flow: column;
     height: max-content;
-    width: 100vw;
+    width: 100%;
     background: linear-gradient(rgb(245, 235, 210), white);
 }
 
@@ -100,7 +100,7 @@
     display: flex;
     flex-wrap: wrap;
     height: max-content;
-    width: 100vw;
+    width: 100%;
     background-color: #0867c0;
     overflow-x: auto;
 }
@@ -133,6 +133,7 @@
 }
 
 .main__content{
+    width: 95vw;
     display: flex;
     flex-flow: row;
     height: max-content;
