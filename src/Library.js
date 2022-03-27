@@ -3,7 +3,7 @@ import './Library.css'
 import firebase from './firebase';
 import { Navigate } from "react-router-dom"
 import Button from '@mui/material/Button';
-import { useFormik, Formik } from 'formik';
+import { Formik } from 'formik';
 import TextField from '@mui/material/TextField';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -164,13 +164,21 @@ class Library extends React.Component{
             enableReinitialize
 
             initialValues = {{
+              Name: this.state.books[props.index].chapters[this.state.edit_chapter[1]].Name,
               Location: this.state.books[props.index].chapters[this.state.edit_chapter[1]].Location? this.state.books[props.index].chapters[this.state.edit_chapter[1]].Location:"" ,
-              Time: "",
-              Synopsis: ""         
+              Time: this.state.books[props.index].chapters[this.state.edit_chapter[1]].Time? this.state.books[props.index].chapters[this.state.edit_chapter[1]].Time:"",
+              Synopsis:this.state.books[props.index].chapters[this.state.edit_chapter[1]].Synopsis? this.state.books[props.index].chapters[this.state.edit_chapter[1]].Synopsis:""         
             }}
 
             onSubmit={(values) => {
-              alert("Hello!")
+              this.state.books[props.index].chapters[this.state.edit_chapter[1]] = values;
+              this.setState({
+                books: this.state.books
+              })
+
+              db.collection('users').doc(this.props.user.uid).set({
+                books: this.state.books
+              }, {merge: true}).then(alert("Chapter Updated Successfully!")) 
             }}
           >
 
