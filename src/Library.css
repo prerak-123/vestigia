@@ -77,12 +77,18 @@
 }
 
 .button__1{
-    background-color: rgb(16, 131, 207);
+    background-color: rgb(39, 156, 9);
     border: none;
     cursor: pointer;
 }
 
 .button__2{
+    background-color: rgb(16, 131, 238);
+    border: none;
+    cursor: pointer;
+}
+
+.button__3{
     background-color: rgb(241, 64, 33);
     border: none;
     cursor: pointer;
