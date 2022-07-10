@@ -32,6 +32,7 @@ class Library extends React.Component {
     this.RenderEditPage = this.RenderEditPage.bind(this);
     this.EditChapter = this.EditChapter.bind(this);
     this.ChaptersList = this.ChaptersList.bind(this);
+    this.ShowCharacters = this.ShowCharacters.bind(this);
   }
 
   componentDidMount() {
@@ -192,32 +193,58 @@ class Library extends React.Component {
     );
   };
 
-  EditChapter = (props) => {
-    function ShowCharacters(props) {
-      if (props.newcharacter)
-        return (
-          <div className="character__button">
-            <Button
-              startIcon={<AddBoxIcon />}
-              variant="contained"
-              size="large"
-              style={{ maxWidth: "55vw" }}
-            >
-              {props.name}
-            </Button>
-          </div>
-        );
-
+  ShowCharacters = (props) => {
+    if (props.newcharacter)
       return (
         <div className="character__button">
-          <Button variant="contained" size="large" style={{ maxWidth: "55vw" }}>
+          <Button
+            startIcon={<AddBoxIcon />}
+            variant="contained"
+            size="large"
+            style={{ maxWidth: "55vw" }}
+            onClick={(event)=>{
+              let temp = {
+                name: "Enter Name",
+                chapters: [],
+              }
+
+              for(let i = props.chapter_index; i < this.state.books[props.book_index].chapters.length ;i++){
+                temp.chapters.push(this.state.books[props.book_index].chapters[i].Name)
+              }
+              console.log(temp)
+
+              this.state.books[props.book_index].characters.push(temp);
+
+              this.setState({
+                books: this.state.books,
+              });
+
+              db.collection("users")
+                .doc(this.props.user.uid)
+                .set(
+                  {
+                    books: this.state.books,
+                  },
+                  { merge: true }
+                )
+                .then(alert("Character Added Successfully!"));
+
+            }}
+          >
             {props.name}
           </Button>
         </div>
       );
-    }
 
-    //End of showCharacters Function
+    return (
+      <div className="character__button">
+        <Button variant="contained" size="large" style={{ maxWidth: "55vw" }}>
+          {props.name}
+        </Button>
+      </div>
+    );
+  }
+  EditChapter = (props) => {
     if (!this.state.newchapter) {
       return (
         <div className="edit__chapter">
@@ -225,7 +252,7 @@ class Library extends React.Component {
           <hr />
           <p>Characters</p>
           <div className="characters__list">
-            <ShowCharacters name="New Character" newcharacter={true} />
+            <this.ShowCharacters name="New Character" newcharacter={true} chapter_index={this.state.edit_chapter[1]} book_index={props.index}/>
           </div>
           <hr />
           <p>Details</p>

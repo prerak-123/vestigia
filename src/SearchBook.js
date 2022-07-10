@@ -62,6 +62,7 @@ class SearchBook extends React.Component {
 					authors: authors,
 					thumbnail: thumbnail,
 					chapters: [],
+					characters: [],
 				};
 
 				db.collection("users")
