@@ -238,7 +238,7 @@ class Library extends React.Component {
 
     return (
       <div className="character__button">
-        <Button variant="contained" size="large" style={{ maxWidth: "55vw" }}>
+        <Button variant="outlined" color="success" size="large" style={{ maxWidth: "55vw" }}>
           {props.name}
         </Button>
       </div>
@@ -249,11 +249,6 @@ class Library extends React.Component {
       return (
         <div className="edit__chapter">
           <p className="chapter__title"> {props.name} </p>
-          <hr />
-          <p>Characters</p>
-          <div className="characters__list">
-            <this.ShowCharacters name="New Character" newcharacter={true} chapter_index={this.state.edit_chapter[1]} book_index={props.index}/>
-          </div>
           <hr />
           <p>Details</p>
           <ThemeProvider theme={theme}>
@@ -350,6 +345,16 @@ class Library extends React.Component {
             </Formik>
           </ThemeProvider>
           <hr />
+
+          <p>Characters</p>
+          <div className="characters__list">
+            {this.state.books[props.index].characters.map((character, index) => (
+              character.chapters.includes(props.name) && <this.ShowCharacters key={index} name={character.name} newcharacter={false} chapter_index={this.state.edit_chapter[1]} book_index={props.index}/>
+            ))}
+            <this.ShowCharacters name="New Character" newcharacter={true} chapter_index={this.state.edit_chapter[1]} book_index={props.index}/>
+          </div>
+          <hr />
+
           <Button
             style={{ marginBottom: "20px", alignSelf: "center" }}
             color="error"
