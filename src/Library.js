@@ -356,6 +356,16 @@ class Library extends React.Component {
             variant="contained"
             onClick={(event) => {
               if (window.confirm("Are you sure you want to remove chapter?")) {
+                for(let i = this.state.books[props.index].characters.length - 1; i >= 0 ;i--){
+                  if(this.state.books[props.index].characters[i].chapters.includes(this.state.books[props.index].chapters[this.state.edit_chapter[1]].Name)){
+                    this.state.books[props.index].characters[i].chapters.splice(this.state.books[props.index].characters[i].chapters.indexOf(this.state.books[props.index].chapters[this.state.edit_chapter[1]].Name),1);
+
+                    if(this.state.books[props.index].characters[i].chapters.length === 0){
+                      this.state.books[props.index].characters.splice(i, 1);
+                    }
+                  }
+                }
+
                 this.state.books[props.index].chapters.splice(
                   this.state.edit_chapter[1],
                   1
@@ -415,6 +425,10 @@ class Library extends React.Component {
             values.Synopsis = "";
 
             this.state.books[props.index].chapters.push(values);
+
+            for(let i = 0; i < this.state.books[props.index].characters.length; i++){
+              this.state.books[props.index].characters[i].chapters.push(values.Name);
+            }
 
             this.setState({
               books: this.state.books,
