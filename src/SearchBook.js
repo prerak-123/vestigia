@@ -3,6 +3,7 @@ import Login from "./Login";
 import axios from "axios";
 import "./SearchBook.css";
 import firebase from "./firebase";
+import swal from 'sweetalert';
 
 const db = firebase.firestore();
 
@@ -47,11 +48,11 @@ class SearchBook extends React.Component {
 						},
 						{ merge: true }
 					)
-					.then(alert("Book Added Successfully"));
+					.then(swal("Book Added Successfully"));
 			} else {
 				for (let i = 0; i < data.books.length; i++) {
 					if (data.books[i].id === id) {
-						alert("Book Already Present in Library!");
+						swal("Book Already Present in Library!");
 						return;
 					}
 				}
@@ -70,7 +71,7 @@ class SearchBook extends React.Component {
 					.update({
 						books: firebase.firestore.FieldValue.arrayUnion(temp),
 					})
-					.then(alert("Book Added Successfully"));
+					.then(swal("Book Added Successfully"));
 			}
 		}
 
@@ -127,7 +128,7 @@ class SearchBook extends React.Component {
 
 	render() {
 		if (this.props.user == null) {
-			alert("Please Log In");
+			swal("Please Log In");
 			return <Login />;
 		}
 

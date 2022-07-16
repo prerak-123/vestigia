@@ -7,6 +7,7 @@ import TextField from "@mui/material/TextField";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Login from "./Login";
+import swal from 'sweetalert';
 
 const theme = createTheme({
   typography: {
@@ -98,7 +99,7 @@ class Library extends React.Component {
                     },
                     { merge: true }
                   )
-                  .then(alert("Book Removed Successfully!"));
+                  .then(swal("", "Book Removed Successfully!", "success"));
               }
             }}
           >
@@ -227,7 +228,7 @@ class Library extends React.Component {
                   },
                   { merge: true }
                 )
-                .then(alert("Character Added Successfully!"));
+                .then(swal("", "Character Added Successfully!", "success"));
 
             }}
           >
@@ -296,7 +297,7 @@ class Library extends React.Component {
                     },
                     { merge: true }
                   )
-                  .then(alert("Chapter Updated Successfully!"));
+                  .then(swal("", "Chapter Updated Successfully!", "success"));
               }}
             >
               {(props) => (
@@ -389,7 +390,7 @@ class Library extends React.Component {
                     },
                     { merge: true }
                   )
-                  .then(alert("Chapter Removed Successfully!"));
+                  .then(swal("", "Chapter Removed Successfully!", "success"));
               }
             }}
           >
@@ -409,7 +410,7 @@ class Library extends React.Component {
           }}
           onSubmit={(values, { resetForm }) => {
             if (values.Name === "") {
-              alert("Enter a name!");
+              swal("", "Enter a name!", "error");
               return;
             }
 
@@ -422,7 +423,7 @@ class Library extends React.Component {
                 this.state.books[props.index].chapters[i].Name.toLowerCase() ===
                 values.Name.toLowerCase()
               ) {
-                alert("Chapter Already Exists!");
+                swal("", "Chapter Already Exists!", "error");
                 return;
               }
             }
@@ -447,7 +448,7 @@ class Library extends React.Component {
                 },
                 { merge: true }
               )
-              .then(alert("Chapter Added Successfully!"));
+              .then(swal("", "Chapter Added Successfully!", "success"));
 
             resetForm();
           }}
@@ -498,7 +499,7 @@ class Library extends React.Component {
 
   render() {
     if (this.props.user == null) {
-      alert("Please Log In");
+      swal("", "Please Log In", "warning");
       return <Login />;
     }
 
