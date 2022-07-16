@@ -125,6 +125,7 @@ class Library extends React.Component {
             event.preventDefault();
             this.setState({
               newchapter: false,
+              edit_character: false,
               edit_chapter: [props.Name, props.index],
             });
           }}
@@ -239,7 +240,11 @@ class Library extends React.Component {
 
     return (
       <div className="character__button">
-        <Button variant="outlined" color="success" size="large" style={{ maxWidth: "55vw" }}>
+        <Button onClick={(event) => {
+          this.setState({
+            edit_character: true
+          })
+        }} variant="outlined" color="success" size="large" style={{ maxWidth: "55vw" }}>
           {props.name}
         </Button>
       </div>
@@ -348,6 +353,7 @@ class Library extends React.Component {
           <hr />
 
           <p>Characters</p>
+
           <div className="characters__list">
             {this.state.books[props.index].characters.map((character, index) => (
               character.chapters.includes(props.name) && <this.ShowCharacters key={index} name={character.name} newcharacter={false} chapter_index={this.state.edit_chapter[1]} book_index={props.index}/>
@@ -380,6 +386,7 @@ class Library extends React.Component {
                   books: this.state.books,
                   newchapter: true,
                   edit_chapter: ["", 0],
+                  edit_character: false,
                 });
 
                 db.collection("users")
