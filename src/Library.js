@@ -7,532 +7,724 @@ import TextField from "@mui/material/TextField";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Login from "./Login";
-import swal from 'sweetalert';
+import swal from "sweetalert";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import InputLabel from "@mui/material/InputLabel";
+import Box from "@mui/material/Box";
 
 const theme = createTheme({
-  typography: {
-    fontSize: 25,
-    fontFamily: ["Cookie", "cursive"].join(","),
-  },
+	typography: {
+		fontSize: 25,
+		fontFamily: ["Cookie", "cursive"].join(","),
+	},
 });
 const db = firebase.firestore();
 
 class Library extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      books: [],
-      show_library: true,
-      edit_book: [false, ""],
-      edit_character: [false,0],
-      newchapter: true,
-      edit_chapter: ["", 0],
-    };
-    this.getInfo = this.getInfo.bind(this);
-    this.RenderBooks = this.RenderBooks.bind(this);
-    this.RenderEditPage = this.RenderEditPage.bind(this);
-    this.EditChapter = this.EditChapter.bind(this);
-    this.ChaptersList = this.ChaptersList.bind(this);
-    this.ShowCharacters = this.ShowCharacters.bind(this);
-  }
+	constructor(props) {
+		super(props);
+		this.state = {
+			books: [],
+			show_library: true,
+			edit_book: [false, ""],
+			edit_character: [false, 0],
+			newchapter: true,
+			edit_chapter: ["", 0],
+		};
+		this.getInfo = this.getInfo.bind(this);
+		this.RenderBooks = this.RenderBooks.bind(this);
+		this.RenderEditPage = this.RenderEditPage.bind(this);
+		this.EditChapter = this.EditChapter.bind(this);
+		this.ChaptersList = this.ChaptersList.bind(this);
+		this.ShowCharacters = this.ShowCharacters.bind(this);
+	}
 
-  componentDidMount() {
-    if (this.props.user !== null) {
-      this.getInfo();
-    }
-  }
+	componentDidMount() {
+		if (this.props.user !== null) {
+			this.getInfo();
+		}
+	}
 
-  getSnapshotBeforeUpdate(prevProps) {
-    return { getInfoRequired: prevProps.user !== this.props.user };
-  }
+	getSnapshotBeforeUpdate(prevProps) {
+		return { getInfoRequired: prevProps.user !== this.props.user };
+	}
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    if (this.props.user !== null && snapshot.getInfoRequired) {
-      this.getInfo();
-    }
-  }
-  //props.book is an object book with title, authors, thumbnail, chapters
-  RenderBooks = (props) => {
-    return (
-      <div className="library__container">
-        <div className="library__image">
-          <img src={props.book.thumbnail} alt={props.book.title}></img>
-        </div>
-        <div className="library__title">
-          <h1>{props.book.title}</h1>
-        </div>
-        <div className="library__button">
-          <button className="button__1">View</button>
-        </div>
-        <div className="library__button">
-          <button
-            className="button__2"
-            onClick={(event) => {
-              event.preventDefault();
-              this.setState({
-                show_library: false,
-                edit_book: [true, props.book.id],
-                edit_character: [false,0]
-              });
-            }}
-          >
-            Edit
-          </button>
-        </div>
+	componentDidUpdate(prevProps, prevState, snapshot) {
+		if (this.props.user !== null && snapshot.getInfoRequired) {
+			this.getInfo();
+		}
+	}
+	//props.book is an object book with title, authors, thumbnail, chapters
+	RenderBooks = (props) => {
+		return (
+			<div className="library__container">
+				<div className="library__image">
+					<img src={props.book.thumbnail} alt={props.book.title}></img>
+				</div>
+				<div className="library__title">
+					<h1>{props.book.title}</h1>
+				</div>
+				<div className="library__button">
+					<button className="button__1">View</button>
+				</div>
+				<div className="library__button">
+					<button
+						className="button__2"
+						onClick={(event) => {
+							event.preventDefault();
+							this.setState({
+								show_library: false,
+								edit_book: [true, props.book.id],
+								edit_character: [false, 0],
+							});
+						}}
+					>
+						Edit
+					</button>
+				</div>
 
-        <div className="library__button">
-          <button
-            className="button__3"
-            onClick={() => {
-              if (
-                window.confirm("Are you sure you want to remove this book?")
-              ) {
-                this.state.books.splice(props.index, 1);
-                this.setState({
-                  books: this.state.books,
-                });
-                db.collection("users")
-                  .doc(this.props.user.uid)
-                  .set(
-                    {
-                      books: this.state.books,
-                    },
-                    { merge: true }
-                  )
-                  .then(swal("", "Book Removed Successfully!", "success"));
-              }
-            }}
-          >
-            Remove
-          </button>
-        </div>
-      </div>
-    );
-  };
+				<div className="library__button">
+					<button
+						className="button__3"
+						onClick={() => {
+							if (
+								window.confirm("Are you sure you want to remove this book?")
+							) {
+								this.state.books.splice(props.index, 1);
+								this.setState({
+									books: this.state.books,
+								});
+								db.collection("users")
+									.doc(this.props.user.uid)
+									.set(
+										{
+											books: this.state.books,
+										},
+										{ merge: true }
+									)
+									.then(swal("", "Book Removed Successfully!", "success"));
+							}
+						}}
+					>
+						Remove
+					</button>
+				</div>
+			</div>
+		);
+	};
 
-  ChaptersList = (props) => {
-    return (
-      <div
-        style={{
-          marginBottom: "15px",
-        }}
-      >
-        <Button
-          variant="outlined"
-          size="large"
-          style={{ width: "25vw" }}
-          onClick={(event) => {
-            event.preventDefault();
-            this.setState({
-              newchapter: false,
-              edit_character: [false,0],
-              edit_chapter: [props.Name, props.index],
-            });
-          }}
-        >
-          {props.Name}
-        </Button>
-      </div>
-    );
-  };
+	ChaptersList = (props) => {
+		return (
+			<div
+				style={{
+					marginBottom: "15px",
+				}}
+			>
+				<Button
+					variant="outlined"
+					size="large"
+					style={{ width: "25vw" }}
+					onClick={(event) => {
+						event.preventDefault();
+						this.setState({
+							newchapter: false,
+							edit_character: [false, 0],
+							edit_chapter: [props.Name, props.index],
+						});
+					}}
+				>
+					{props.Name}
+				</Button>
+			</div>
+		);
+	};
 
-  //props.book is an object book with title, authors, thumbnail, chapters
-  //props.index => this.state.books[i]
-  RenderEditPage = (props) => {
-    return (
-      <div className="edit__page">
-        <div className="edit__page__header">
-          <div className="back__button">
-            <button
-              onClick={(event) => {
-                event.preventDefault();
-                this.setState({
-                  show_library: true,
-                  edit_book: [false, ""],
-                  edit_character: [false,0],
-                  newchapter: true,
-                  edit_chapter: ["", 0],
-                });
-              }}
-            >
-              Back To Library
-            </button>
-          </div>
-          <div className="book__title">
-            <p>{props.book.title}</p>
-          </div>
-        </div>
-        <div className="main__content">
-          <div className="chapters__list">
-            {this.state.books[props.index].chapters.map((chapter, index) => (
-              <this.ChaptersList
-                index={index}
-                key={index}
-                Name={chapter.Name}
-              />
-            ))}
-            <Button
-              startIcon={<AddBoxIcon />}
-              variant="outlined"
-              size="large"
-              style={{ width: "25vw" }}
-              onClick={(event) => {
-                this.setState({
-                  newchapter: true,
-                  edit_chapter: ["", 0],
-                });
-              }}
-            >
-              NEW CHAPTER
-            </Button>
-          </div>
-          <this.EditChapter
-            index={props.index}
-            name={this.state.edit_chapter[0]}
-          />
-        </div>
-      </div>
-    );
-  };
+	//props.book is an object book with title, authors, thumbnail, chapters
+	//props.index => this.state.books[i]
+	RenderEditPage = (props) => {
+		return (
+			<div className="edit__page">
+				<div className="edit__page__header">
+					<div className="back__button">
+						<button
+							onClick={(event) => {
+								event.preventDefault();
+								this.setState({
+									show_library: true,
+									edit_book: [false, ""],
+									edit_character: [false, 0],
+									newchapter: true,
+									edit_chapter: ["", 0],
+								});
+							}}
+						>
+							Back To Library
+						</button>
+					</div>
+					<div className="book__title">
+						<p>{props.book.title}</p>
+					</div>
+				</div>
+				<div className="main__content">
+					<div className="chapters__list">
+						{this.state.books[props.index].chapters.map((chapter, index) => (
+							<this.ChaptersList
+								index={index}
+								key={index}
+								Name={chapter.Name}
+							/>
+						))}
+						<Button
+							startIcon={<AddBoxIcon />}
+							variant="outlined"
+							size="large"
+							style={{ width: "25vw" }}
+							onClick={(event) => {
+								this.setState({
+									newchapter: true,
+									edit_chapter: ["", 0],
+								});
+							}}
+						>
+							NEW CHAPTER
+						</Button>
+					</div>
+					<this.EditChapter
+						index={props.index}
+						name={this.state.edit_chapter[0]}
+					/>
+				</div>
+			</div>
+		);
+	};
 
-  ShowCharacters = (props) => {
-    if (props.newcharacter)
-      return (
-        <div className="character__button">
-          <Button
-            startIcon={<AddBoxIcon />}
-            variant="contained"
-            size="large"
-            style={{ maxWidth: "55vw" }}
-            onClick={(event)=>{
-              let temp = {
-                name: "Enter Name",
-                chapters: [],
-              }
+	ShowCharacters = (props) => {
+		if (props.newcharacter)
+			return (
+				<div className="character__button">
+					<Button
+						startIcon={<AddBoxIcon />}
+						variant="contained"
+						size="large"
+						style={{ maxWidth: "55vw" }}
+						onClick={(event) => {
+							let temp = {
+								name: "Enter Name",
+								chapters: [],
+								Gender: "Select",
+								Status: "Select",
+								Relations: "",
+								History: "",
+							};
 
-              for(let i = props.chapter_index; i < this.state.books[props.book_index].chapters.length ;i++){
-                temp.chapters.push(this.state.books[props.book_index].chapters[i].Name)
-              }
+							for (
+								let i = props.chapter_index;
+								i < this.state.books[props.book_index].chapters.length;
+								i++
+							) {
+								temp.chapters.push(
+									this.state.books[props.book_index].chapters[i].Name
+								);
+							}
 
-              this.state.books[props.book_index].characters.push(temp);
+							this.state.books[props.book_index].characters.push(temp);
 
-              this.setState({
-                books: this.state.books,
-              });
+							this.setState({
+								books: this.state.books,
+							});
 
-              db.collection("users")
-                .doc(this.props.user.uid)
-                .set(
-                  {
-                    books: this.state.books,
-                  },
-                  { merge: true }
-                )
-                .then(swal("", "Character Added Successfully!", "success"));
+							db.collection("users")
+								.doc(this.props.user.uid)
+								.set(
+									{
+										books: this.state.books,
+									},
+									{ merge: true }
+								)
+								.then(swal("", "Character Added Successfully!", "success"));
+						}}
+					>
+						{props.name}
+					</Button>
+				</div>
+			);
 
-            }}
-          >
-            {props.name}
-          </Button>
-        </div>
-      );
+		return (
+			<div className="character__button">
+				<Button
+					onClick={(event) => {
+						this.setState({
+							edit_character: [true, props.character_index],
+						});
+					}}
+					variant="outlined"
+					color="success"
+					size="large"
+					style={{ maxWidth: "55vw" }}
+				>
+					{props.name}
+				</Button>
+			</div>
+		);
+	};
+	EditChapter = (props) => {
+		if (!this.state.newchapter) {
+			return (
+				<div className="edit__chapter">
+					<p className="chapter__title"> {props.name} </p>
+					<hr />
+					<p>Details</p>
+					<ThemeProvider theme={theme}>
+						<Formik
+							enableReinitialize
+							initialValues={{
+								Name: this.state.books[props.index].chapters[
+									this.state.edit_chapter[1]
+								].Name,
+								Location: this.state.books[props.index].chapters[
+									this.state.edit_chapter[1]
+								].Location
+									? this.state.books[props.index].chapters[
+											this.state.edit_chapter[1]
+									  ].Location
+									: "",
+								Time: this.state.books[props.index].chapters[
+									this.state.edit_chapter[1]
+								].Time
+									? this.state.books[props.index].chapters[
+											this.state.edit_chapter[1]
+									  ].Time
+									: "",
+								Synopsis: this.state.books[props.index].chapters[
+									this.state.edit_chapter[1]
+								].Synopsis
+									? this.state.books[props.index].chapters[
+											this.state.edit_chapter[1]
+									  ].Synopsis
+									: "",
+							}}
+							onSubmit={(values) => {
+								this.state.books[props.index].chapters[
+									this.state.edit_chapter[1]
+								] = values;
+								this.setState({
+									books: this.state.books,
+								});
 
-    return (
-      <div className="character__button">
-        <Button onClick={(event) => {
-          this.setState({
-            edit_character: [true, props.character_index],
-          })
-        }} variant="outlined" color="success" size="large" style={{ maxWidth: "55vw" }}>
-          {props.name}
-        </Button>
-      </div>
-    );
-  }
-  EditChapter = (props) => {
-    if (!this.state.newchapter) {
-      return (
-        <div className="edit__chapter">
-          <p className="chapter__title"> {props.name} </p>
-          <hr />
-          <p>Details</p>
-          <ThemeProvider theme={theme}>
-            <Formik
-              enableReinitialize
-              initialValues={{
-                Name: this.state.books[props.index].chapters[
-                  this.state.edit_chapter[1]
-                ].Name,
-                Location: this.state.books[props.index].chapters[
-                  this.state.edit_chapter[1]
-                ].Location
-                  ? this.state.books[props.index].chapters[
-                    this.state.edit_chapter[1]
-                  ].Location
-                  : "",
-                Time: this.state.books[props.index].chapters[
-                  this.state.edit_chapter[1]
-                ].Time
-                  ? this.state.books[props.index].chapters[
-                    this.state.edit_chapter[1]
-                  ].Time
-                  : "",
-                Synopsis: this.state.books[props.index].chapters[
-                  this.state.edit_chapter[1]
-                ].Synopsis
-                  ? this.state.books[props.index].chapters[
-                    this.state.edit_chapter[1]
-                  ].Synopsis
-                  : "",
-              }}
-              onSubmit={(values) => {
-                this.state.books[props.index].chapters[
-                  this.state.edit_chapter[1]
-                ] = values;
-                this.setState({
-                  books: this.state.books,
-                });
+								db.collection("users")
+									.doc(this.props.user.uid)
+									.set(
+										{
+											books: this.state.books,
+										},
+										{ merge: true }
+									)
+									.then(swal("", "Chapter Updated Successfully!", "success"));
+							}}
+						>
+							{(props) => (
+								<form onSubmit={props.handleSubmit}>
+									<TextField
+										style={{ width: "40vw" }}
+										variant="standard"
+										label="Location"
+										id="Location"
+										name="Location"
+										value={props.values.Location}
+										onChange={props.handleChange}
+									/>
 
-                db.collection("users")
-                  .doc(this.props.user.uid)
-                  .set(
-                    {
-                      books: this.state.books,
-                    },
-                    { merge: true }
-                  )
-                  .then(swal("", "Chapter Updated Successfully!", "success"));
-              }}
-            >
-              {(props) => (
-                <form onSubmit={props.handleSubmit}>
-                  <TextField
-                    style={{ width: "40vw" }}
-                    variant="standard"
-                    label="Location"
-                    id="Location"
-                    name="Location"
-                    value={props.values.Location}
-                    onChange={props.handleChange}
-                  />
+									<TextField
+										style={{ width: "40vw" }}
+										variant="standard"
+										label="Time"
+										id="Time"
+										name="Time"
+										value={props.values.Time}
+										onChange={props.handleChange}
+									/>
+									<TextField
+										style={{ width: "40vw" }}
+										multiline
+										variant="standard"
+										label="Synopsis"
+										id="Synopsis"
+										name="Synopsis"
+										value={props.values.Synopsis}
+										onChange={props.handleChange}
+									/>
 
-                  <TextField
-                    style={{ width: "40vw" }}
-                    variant="standard"
-                    label="Time"
-                    id="Time"
-                    name="Time"
-                    value={props.values.Time}
-                    onChange={props.handleChange}
-                  />
-                  <TextField
-                    style={{ width: "40vw" }}
-                    multiline
-                    variant="standard"
-                    label="Synopsis"
-                    id="Synopsis"
-                    name="Synopsis"
-                    value={props.values.Synopsis}
-                    onChange={props.handleChange}
-                  />
+									<br />
 
-                  <br />
+									<Button
+										style={{ marginTop: "20px" }}
+										type="submit"
+										variant="contained"
+									>
+										Update
+									</Button>
+								</form>
+							)}
+						</Formik>
+					</ThemeProvider>
+					<hr />
 
-                  <Button
-                    style={{ marginTop: "20px" }}
-                    type="submit"
-                    variant="contained"
-                  >
-                    Update
-                  </Button>
-                </form>
-              )}
-            </Formik>
-          </ThemeProvider>
-          <hr />
+					<p>Characters</p>
+					{this.state.edit_character[0] && (
+						<ThemeProvider theme={theme}>
+							<Formik
+								enableReinitialize
+								initialValues={{
+									name: this.state.books[props.index].characters[
+										this.state.edit_character[1]
+									].name,
+									Gender:
+										this.state.books[props.index].characters[
+											this.state.edit_character[1]
+										].Gender,
+									Status:
+										this.state.books[props.index].characters[
+											this.state.edit_character[1]
+										].Status,
+									Relations: this.state.books[props.index].characters[
+										this.state.edit_character[1]
+									].Relations
+										? this.state.books[props.index].characters[
+												this.state.edit_character[1]
+										  ].Relations
+										: "",
+									History: this.state.books[props.index].characters[
+										this.state.edit_character[1]
+									].History
+										? this.state.books[props.index].characters[
+												this.state.edit_character[1]
+										  ].History
+										: "",
+								}}
+								onSubmit={(values) => {
+									console.log(values);
+								}}
+							>
+								{(props) => (
+									<form onSubmit={props.handleSubmit}>
+										<TextField
+											style={{ width: "40vw" }}
+											variant="standard"
+											label="Name"
+											id="name"
+											name="name"
+											value={props.values.name}
+											onChange={props.handleChange}
+										/>
+										<Box>
+											<InputLabel id="Gender">Gender</InputLabel>
+											<Select
+												value={props.values.Gender}
+												label="Gender"
+												onChange={props.handleChange}
+												name="Gender"
+												id="Name"
+												style={{ width: "25vw" }}
+											>
+												<MenuItem value="Select" style={{ width: "25vw" }}>
+													Select
+												</MenuItem>
+												<MenuItem value="Male" style={{ width: "25vw" }}>
+													Male
+												</MenuItem>
+												<MenuItem value="Female" style={{ width: "25vw" }}>
+													Female
+												</MenuItem>
+											</Select>
+										</Box>
 
-          <p>Characters</p>
-          {this.state.edit_character[0] && <p>{this.state.edit_character[1]}</p>}
-          <div className="characters__list">
-            {this.state.books[props.index].characters.map((character, index) => (
-              character.chapters.includes(props.name) && <this.ShowCharacters key={index} name={character.name} newcharacter={false} chapter_index={this.state.edit_chapter[1]} book_index={props.index} character_index={index}/>
-            ))}
-            <this.ShowCharacters name="New Character" newcharacter={true} chapter_index={this.state.edit_chapter[1]} book_index={props.index}/>
-          </div>
-          <hr />
+										<Box>
+											<InputLabel id="Status">Status</InputLabel>
+											<Select
+												value={props.values.Status}
+												label="Status"
+												onChange={props.handleChange}
+												name="Status"
+												id="Status"
+												style={{ width: "25vw" }}
+											>
+												<MenuItem value="Select" style={{ width: "25vw" }}>
+													Select
+												</MenuItem>
+												<MenuItem value="Alive" style={{ width: "25vw" }}>
+													Alive
+												</MenuItem>
+												<MenuItem value="Dead" style={{ width: "25vw" }}>
+													Dead
+												</MenuItem>
+											</Select>
+										</Box>
 
-          <Button
-            style={{ marginBottom: "20px", alignSelf: "center" }}
-            color="error"
-            variant="contained"
-            onClick={(event) => {
-              if (window.confirm("Are you sure you want to remove chapter?")) {
-                for(let i = this.state.books[props.index].characters.length - 1; i >= 0 ;i--){
-                  if(this.state.books[props.index].characters[i].chapters.includes(this.state.books[props.index].chapters[this.state.edit_chapter[1]].Name)){
-                    this.state.books[props.index].characters[i].chapters.splice(this.state.books[props.index].characters[i].chapters.indexOf(this.state.books[props.index].chapters[this.state.edit_chapter[1]].Name),1);
+                    <TextField
+                      multiline
+											style={{ width: "40vw" }}
+											variant="standard"
+											label="Relations"
+											id="Relations"
+											name="Relations"
+											value={props.values.Relations}
+											onChange={props.handleChange}
+										/>
 
-                    if(this.state.books[props.index].characters[i].chapters.length === 0){
-                      this.state.books[props.index].characters.splice(i, 1);
-                    }
-                  }
-                }
+                    <TextField
+                      multiline
+											style={{ width: "40vw" }}
+											variant="standard"
+											label="History"
+											id="History"
+											name="History"
+											value={props.values.History}
+											onChange={props.handleChange}
+										/>
 
-                this.state.books[props.index].chapters.splice(
-                  this.state.edit_chapter[1],
-                  1
-                );
-                this.setState({
-                  books: this.state.books,
-                  newchapter: true,
-                  edit_chapter: ["", 0],
-                  edit_character: [false,0]
-                });
+                    <br/>
 
-                db.collection("users")
-                  .doc(this.props.user.uid)
-                  .set(
-                    {
-                      books: this.state.books,
-                    },
-                    { merge: true }
-                  )
-                  .then(swal("", "Chapter Removed Successfully!", "success"));
-              }
-            }}
-          >
-            Remove Chapter
-          </Button>
-        </div>
-      );
-    }
+										<Button
+											style={{ marginTop: "20px" }}
+											type="submit"
+											variant="contained"
+										>
+											Update
+										</Button>
+									</form>
+								)}
+							</Formik>
+						</ThemeProvider>
 
-    return (
-      <div className="edit__chapter">
-        <p>New Chapter</p>
-        <hr />
-        <Formik
-          initialValues={{
-            Name: "",
-          }}
-          onSubmit={(values, { resetForm }) => {
-            if (values.Name === "") {
-              swal("", "Enter a name!", "error");
-              return;
-            }
+					)}
 
-            for (
-              let i = 0;
-              i < this.state.books[props.index].chapters.length;
-              i++
-            ) {
-              if (
-                this.state.books[props.index].chapters[i].Name.toLowerCase() ===
-                values.Name.toLowerCase()
-              ) {
-                swal("", "Chapter Already Exists!", "error");
-                return;
-              }
-            }
-            values.Time = "";
-            values.Synopsis = "";
+          {this.state.edit_character[0] && <hr/>}
+					<div className="characters__list">
+						{this.state.books[props.index].characters.map(
+							(character, index) =>
+								character.chapters.includes(props.name) && (
+									<this.ShowCharacters
+										key={index}
+										name={character.name}
+										newcharacter={false}
+										chapter_index={this.state.edit_chapter[1]}
+										book_index={props.index}
+										character_index={index}
+									/>
+								)
+						)}
+						<this.ShowCharacters
+							name="New Character"
+							newcharacter={true}
+							chapter_index={this.state.edit_chapter[1]}
+							book_index={props.index}
+						/>
+					</div>
+					<hr />
 
-            this.state.books[props.index].chapters.push(values);
+					<Button
+						style={{ marginBottom: "20px", alignSelf: "center" }}
+						color="error"
+						variant="contained"
+						onClick={(event) => {
+							if (window.confirm("Are you sure you want to remove chapter?")) {
+								for (
+									let i = this.state.books[props.index].characters.length - 1;
+									i >= 0;
+									i--
+								) {
+									if (
+										this.state.books[props.index].characters[
+											i
+										].chapters.includes(
+											this.state.books[props.index].chapters[
+												this.state.edit_chapter[1]
+											].Name
+										)
+									) {
+										this.state.books[props.index].characters[i].chapters.splice(
+											this.state.books[props.index].characters[
+												i
+											].chapters.indexOf(
+												this.state.books[props.index].chapters[
+													this.state.edit_chapter[1]
+												].Name
+											),
+											1
+										);
 
-            for(let i = 0; i < this.state.books[props.index].characters.length; i++){
-              this.state.books[props.index].characters[i].chapters.push(values.Name);
-            }
+										if (
+											this.state.books[props.index].characters[i].chapters
+												.length === 0
+										) {
+											this.state.books[props.index].characters.splice(i, 1);
+										}
+									}
+								}
 
-            this.setState({
-              books: this.state.books,
-            });
+								this.state.books[props.index].chapters.splice(
+									this.state.edit_chapter[1],
+									1
+								);
+								this.setState({
+									books: this.state.books,
+									newchapter: true,
+									edit_chapter: ["", 0],
+									edit_character: [false, 0],
+								});
 
-            db.collection("users")
-              .doc(this.props.user.uid)
-              .set(
-                {
-                  books: this.state.books,
-                },
-                { merge: true }
-              )
-              .then(swal("", "Chapter Added Successfully!", "success"));
+								db.collection("users")
+									.doc(this.props.user.uid)
+									.set(
+										{
+											books: this.state.books,
+										},
+										{ merge: true }
+									)
+									.then(swal("", "Chapter Removed Successfully!", "success"));
+							}
+						}}
+					>
+						Remove Chapter
+					</Button>
+				</div>
+			);
+		}
 
-            resetForm();
-          }}
-        >
-          {(props) => (
-            <form onSubmit={props.handleSubmit}>
-              <ThemeProvider theme={theme}>
-                <TextField
-                  style={{
-                    width: "40vw",
-                    marginRight: "3vw",
-                  }}
-                  variant="standard"
-                  label="Enter Name of Chapter"
-                  placeholder="Unique Name to Identify Chapter"
-                  id="Name"
-                  name="Name"
-                  value={props.values.Name}
-                  onChange={props.handleChange}
-                />
+		return (
+			<div className="edit__chapter">
+				<p>New Chapter</p>
+				<hr />
+				<Formik
+					initialValues={{
+						Name: "",
+					}}
+					onSubmit={(values, { resetForm }) => {
+						if (values.Name === "") {
+							swal("", "Enter a name!", "error");
+							return;
+						}
 
-                <Button
-                  onClick={(event) => {
-                    event.preventDefault();
-                    props.handleSubmit();
-                  }}
-                  variant="contained"
-                >
-                  Add Chapter
-                </Button>
-              </ThemeProvider>
-            </form>
-          )}
-        </Formik>
-      </div>
-    );
-  };
+						for (
+							let i = 0;
+							i < this.state.books[props.index].chapters.length;
+							i++
+						) {
+							if (
+								this.state.books[props.index].chapters[i].Name.toLowerCase() ===
+								values.Name.toLowerCase()
+							) {
+								swal("", "Chapter Already Exists!", "error");
+								return;
+							}
+						}
+						values.Time = "";
+						values.Synopsis = "";
 
-  getInfo = async () => {
-    const dataRef = await db.collection("users").doc(this.props.user.uid).get();
-    const data = dataRef.data();
-    if (data.books != null) {
-      this.setState({
-        books: data.books,
-      });
-    }
-  };
+						this.state.books[props.index].chapters.push(values);
 
-  render() {
-    if (this.props.user == null) {
-      swal("", "Please Log In", "warning");
-      return <Login />;
-    }
+						for (
+							let i = 0;
+							i < this.state.books[props.index].characters.length;
+							i++
+						) {
+							this.state.books[props.index].characters[i].chapters.push(
+								values.Name
+							);
+						}
 
-    if (this.state.show_library) {
-      return (
-        <div className="library">
-          <p className="title">Your Library</p>
-          <hr className="horizontal__line" />
-          {this.state.books.length > 0 && (
-            <div className="library__books">
-              {this.state.books.map((book, index) => (
-                <this.RenderBooks book={book} key={book.title} index={index} />
-              ))}
-            </div>
-          )}
-        </div>
-      );
-    }
+						this.setState({
+							books: this.state.books,
+						});
 
-    if (this.state.edit_book[0]) {
-      for (let i = 0; i < this.state.books.length; i++) {
-        if (this.state.books[i].id === this.state.edit_book[1]) {
-          return <this.RenderEditPage book={this.state.books[i]} index={i} />;
-        }
-      }
-    }
-  }
+						db.collection("users")
+							.doc(this.props.user.uid)
+							.set(
+								{
+									books: this.state.books,
+								},
+								{ merge: true }
+							)
+							.then(swal("", "Chapter Added Successfully!", "success"));
+
+						resetForm();
+					}}
+				>
+					{(props) => (
+						<form onSubmit={props.handleSubmit}>
+							<ThemeProvider theme={theme}>
+								<TextField
+									style={{
+										width: "40vw",
+										marginRight: "3vw",
+									}}
+									variant="standard"
+									label="Enter Name of Chapter"
+									placeholder="Unique Name to Identify Chapter"
+									id="Name"
+									name="Name"
+									value={props.values.Name}
+									onChange={props.handleChange}
+								/>
+
+								<Button
+									onClick={(event) => {
+										event.preventDefault();
+										props.handleSubmit();
+									}}
+									variant="contained"
+								>
+									Add Chapter
+								</Button>
+							</ThemeProvider>
+						</form>
+					)}
+				</Formik>
+			</div>
+		);
+	};
+
+	getInfo = async () => {
+		const dataRef = await db.collection("users").doc(this.props.user.uid).get();
+		const data = dataRef.data();
+		if (data.books != null) {
+			this.setState({
+				books: data.books,
+			});
+		}
+	};
+
+	render() {
+		if (this.props.user == null) {
+			swal("", "Please Log In", "warning");
+			return <Login />;
+		}
+
+		if (this.state.show_library) {
+			return (
+				<div className="library">
+					<p className="title">Your Library</p>
+					<hr className="horizontal__line" />
+					{this.state.books.length > 0 && (
+						<div className="library__books">
+							{this.state.books.map((book, index) => (
+								<this.RenderBooks book={book} key={book.title} index={index} />
+							))}
+						</div>
+					)}
+				</div>
+			);
+		}
+
+		if (this.state.edit_book[0]) {
+			for (let i = 0; i < this.state.books.length; i++) {
+				if (this.state.books[i].id === this.state.edit_book[1]) {
+					return <this.RenderEditPage book={this.state.books[i]} index={i} />;
+				}
+			}
+		}
+	}
 }
 
 export default Library;
